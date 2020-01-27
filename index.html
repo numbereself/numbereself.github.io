@@ -1,7 +1,168 @@
 <!DOCTYPE html>
 <html>
-<body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
-</body>
+  <head>
+    <meta charset="utf-8"> 
+    <link rel="manifest" id="manifest-placeholder" href="/manifest.json">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+      <script>
+        if('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+              navigator.serviceWorker.register('sw.js')
+              .then((registration) => {
+                console.log("Service Worker registration successful")
+              }, (err) => {
+                console.log("Registration failed")
+              })
+              })
+            }
+        window.onload = function() {
+          
+        var unity_target = {
+          Vibrate : function(arg)
+            {window.navigator.vibrate(arg);},
+          //https://stackoverflow.com/questions/4817029/whats-the-best-way-to-detect-a-touch-screen-device-using-javascript
+          IsTouchDevice: function() {
+            var prefixes = ' -webkit- -moz- -o- -ms- '.split(' ');
+
+            var mq = function (query) {
+              return window.matchMedia(query).matches;
+            }
+
+            if (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) {
+                return true;
+            }
+
+            // include the 'heartz' as a way to have a non matching MQ to help terminate the join
+            // https://git.io/vznFH
+            var query = ['(', prefixes.join('touch-enabled),('), 'heartz', ')'].join('');
+            return mq(query);
+          },
+
+          WantsDarkMode : function() {
+            var x = window.matchMedia("(prefers-color-scheme: dark)");
+            return x.matches;
+          },
+          //https://github.com/mdn/web-speech-api/tree/master/speech-color-changer
+          RegisterSpeechContext : function(context, game_object, game_function) {
+            var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
+            var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList
+            var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent
+            
+            var grammar = '#JSGF V1.0; grammar colors; public <color> = ' + context.join(' | ') + ' ;'
+
+            var recognition = new SpeechRecognition();
+            var speechRecognitionList = new SpeechGrammarList();
+            speechRecognitionList.addFromString(grammar, 1);
+            recognition.grammars = speechRecognitionList;
+            //recognition.continuous = false;
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+            recognition.onresult = function(event) {
+              var last = event.results.length - 1;
+              var res = event.results[last][0].transcript;
+              if (window.unityInstance)
+                {window.unityInstance.SendMessage(game_object, game_function, res);}
+              else {
+                console.log(res);
+                console.log('Confidence: ' + event.results[0][0].confidence);
+              }
+            }
+            recognition.onspeechend = function() 
+              {recognition.stop();}
+            recognition.start();
+            return recognition;
+          },
+          //returns undefined if no error
+          RequestShare(title,text,url) {
+            if (navigator.share === undefined) {
+              return "Unsupported";
+            }
+
+            try {
+              navigator.share({title, text, url});
+              return undefined;
+            } catch (error) {
+              return "Failed to share: " + error;
+            }
+          },
+          //https://stackoverflow.com/questions/20773306/mozilla-firefox-not-working-with-window-onbeforeunload
+          //pass unidentified to clear message
+          ConfirmationMessage: function(msg) {
+          //INSERT UNITY SPECIAL DECODE HERE!!!!
+          
+            window.onbeforeunload = function(){
+              if (msg != "12795")
+                {return msg;}
+              else
+                {return;}
+            }
+          },
+          StringDownload: function(msg) {
+            var fileInput = document.getElementById('downloadAnchorElem')
+            if (fileInput) {
+                document.body.removeChild(fileInput);
+            }
+            fileInput = document.createElement('a');
+            fileInput.setAttribute('id', 'downloadAnchorElem');
+            fileInput.setAttribute('style','display:none;');
+            document.body.appendChild(fileInput);
+          
+            var dataStr = "data:text/plain;charset=utf-8," + encodeURIComponent(msg);
+            var dlAnchorElem = document.getElementById('downloadAnchorElem');
+            dlAnchorElem.setAttribute("href",     dataStr     );
+            dlAnchorElem.setAttribute("download", "scribble.txt");
+            dlAnchorElem.click();
+          },
+          
+          StringUp :function(game_object, game_function) {
+            var input = document.createElement('input');
+            input.type = 'file';
+
+            input.onchange = e => {
+
+               // getting a hold of the file reference
+               var file = e.target.files[0]; 
+
+               // setting up the reader
+               var reader = new FileReader();
+               reader.readAsText(file,'UTF-8');
+
+               // here we tell the reader what to do when it's done reading...
+               reader.onload = readerEvent => {
+                  var content = readerEvent.target.result; // this is the content!
+                  if (window.unityInstance)
+                    {window.unityInstance.SendMessage(game_object, game_function, content);}
+                  else 
+                    {console.log(content);}
+                }
+            }
+            document.body.appendChild(input);
+          },
+          makePWA : function(manifest) {
+            document.querySelector('#manifest-placeholder').setAttribute('href', "/manifest.json");
+          }
+        }
+
+        unity_target.Vibrate(300);
+        console.log(unity_target.IsTouchDevice());
+        console.log(unity_target.WantsDarkMode());
+        
+        var colors = [ 'aqua' , 'azure' , 'beige', 'bisque', 'black', 'blue', 'brown', 'chocolate', 'coral', 'crimson', 'cyan', 'fuchsia', 'ghostwhite', 'gold', 'goldenrod', 'gray', 'green', 'indigo', 'ivory', 'khaki', 'lavender', 'lime', 'linen', 'magenta', 'maroon', 'moccasin', 'navy', 'olive', 'orange', 'orchid', 'peru', 'pink', 'plum', 'purple', 'red', 'salmon', 'sienna', 'silver', 'snow', 'tan', 'teal', 'thistle', 'tomato', 'turquoise', 'violet', 'white', 'yellow'];
+        
+        //var recog = unity_target.register_speech_context(colors);
+        console.log(unity_target.RequestShare("i","have","no idea"));
+        unity_target.ConfirmationMessage("pls stay");
+        unity_target.ConfirmationMessage();
+        unity_target.StringDownload("Hello i am javascript world");
+        unity_target.StringUp("hello","world");
+        //unity_target.makePWA("/manifest.json");
+        }
+      </script>
+  </head> 
+  <body>
+    <img src ="/images/img.png">
+    There is nothing here!
+    <br>
+  </body>
 </html>
