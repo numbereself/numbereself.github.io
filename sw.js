@@ -1,4 +1,4 @@
-let cache_name = 'unitext_v2'
+let cache_name = 'unitext_v101'
 
 self.addEventListener('install', (e) => {
     console.log("Service install");
