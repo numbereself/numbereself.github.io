@@ -11,7 +11,7 @@
     <script>
       if('serviceWorker' in navigator) {
           window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js')
+            navigator.serviceWorker.register('/sw.js')
             .then((registration) => {
               console.log("Service Worker registration successful")
             }, (err) => {
@@ -20,9 +20,9 @@
             })
           }
     </script>
-    <script src="Build/UnityLoader.js"></script>
+    <script src="/Build/UnityLoader.js"></script>
     <script>
-      var gameInstance = UnityLoader.instantiate("gameContainer", "Build/Desktop.json");
+      var gameInstance = UnityLoader.instantiate("gameContainer", "/Build/Desktop.json");
     </script>
   </head>
   <body>
