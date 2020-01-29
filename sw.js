@@ -13,10 +13,11 @@ self.addEventListener('install', (e) => {
 });
 
 self.addEventListener('activate', (e) => {
-    console.log("Service activate");
+    console.log("NEW Service activate");
 });
 
 self.addEventListener('fetch', (e) => {
+    console.log("Fetching " + e.request.url)
     e.respondWith(caches.match(e.request).then((response) => {
      if(response)
      {
