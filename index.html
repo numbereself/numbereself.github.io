@@ -3,27 +3,24 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | WebGL_firstTry</title>
+    <title>Service workers are bad</title>
     <link rel="manifest" id="manifest-placeholder" href="/manifest.json">
     <script>
       if('serviceWorker' in navigator) {
-        alert("the thing");
-          window.onload = function() {
             navigator.serviceWorker.register('/sw.js')
             .then((registration) => {
-              console.log("Service Worker registration successful")
+              console.log("Service Worker registration successful");
             }, (err) => {
-              console.log("Registration failed")
-            })
-            }
+              console.log("Service Worker registration failed");
+            });
           }
-    </script>
-    <script src="build/UnityLoader.js"></script>
-    <script>
-      var gameInstance = UnityLoader.instantiate("gameContainer", "build/Desktop.json");
     </script>
   </head>
   <body>
-    <div id="gameContainer" style="width: 960px; height: 600px; margin: auto"></div>
+  <image src="images/icon48.png"></image>
+  Hello world
+    <div id="gameContainer" style="width: 960px; height: 600px; margin: auto">
+    
+    </div>
   </body>
 </html>
