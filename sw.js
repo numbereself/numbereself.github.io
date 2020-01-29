@@ -12,11 +12,12 @@ let urls_to_cache = [
 ]
 self.addEventListener('install', (e) => {
     e.waitUntil(caches.open(cache_name).then((cache) => {
-        return cache.addAll(urls_to_cache)
+        return cache.addAll(urls_to_cache);
     }) )
 })
 
 self.addEventListener('fetch', (e) => {
+    alert(e.request.url);
     e.respondWith(caches.match(e.request).then((response) => {
      if(response)
      {
