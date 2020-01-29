@@ -10,7 +10,7 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', function(event) {
   event.respondWith(
-    caches.open('mysite-dynamic').then(function(cache) {
+    caches.open(cache_name).then(function(cache) {
       return cache.match(event.request).then(function (response) {
         return fetch(event.request).then(function(response) {
           cache.put(event.request, response.clone());
