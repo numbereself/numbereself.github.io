@@ -2,7 +2,13 @@ let cache_name = 'mysite-v1'
 
 let urls_to_cache = [
     '/',
-    '/images/img.png'
+    '/images/icon48.png',
+    '/build/Desktop.data.unityweb',
+    '/build/Desktop.json',
+    '/build/Desktop.wasm.code.unityweb',
+    '/build/Desktop.wasm.framework.unityweb',
+    '/build/UnityLoader.js'
+
 ]
 self.addEventListener('install', (e) => {
     e.waitUntil(caches.open(cache_name).then((cache) => {
