@@ -1,4 +1,4 @@
-let cache_name = 'unitext_v103'
+let cache_name = 'unitext_v104'
 
 let urls_to_cache = [
     '',

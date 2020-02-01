@@ -962,7 +962,6 @@ var UnityLoader = UnityLoader || {
       Module.canvas.style.width = "100%";
       Module.canvas.style.height = "100%";
       Module.canvas.addEventListener("contextmenu", function (e) { e.preventDefault() }),
-      Module.canvas.addEventListener("dragstart", function (e) { e.preventDefault() }),
       Module.canvas.id = "#canvas";
       container.appendChild(Module.canvas);
 
