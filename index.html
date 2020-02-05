@@ -105,12 +105,12 @@
 	</div>
 </body>
 
-<script src="Build/UnityLoader.js"></script>
+<script src="build/UnityLoader.js"></script>
 <script>
 	// https://docs.unity3d.com/Manual/webgl-templates.html
 	// https://github.com/greggman/better-unity-webgl-template 
 
-	window.gameInstance = UnityLoader.instantiate("MyContainer", "Build/webgl_207.json", {
+	window.gameInstance = UnityLoader.instantiate("MyContainer", "build/webgl_207.json", {
 		compatibilityCheck: function (unityInstance, onsuccess, onerror) {
 			if (!UnityLoader.SystemInfo.hasWebGL) {
 				unityInstance.popup("Your browser does not support WebGL", [{ text: "OK", callback: onerror }]);
