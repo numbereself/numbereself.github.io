@@ -1,14 +1,14 @@
-let cache_name = 'unitext_v105'
+let cache_name = 'unitext_v207'
 
 let urls_to_cache = [
     '',
     '/',
     '/index.html',
-    '/build/Desktop.data.unityweb',
-    '/build/Desktop.json',
-    '/build/Desktop.wasm.code.unityweb',
-    '/build/Desktop.wasm.framework.unityweb',
-    '/build/UnityLoader.js'
+    '/Build/webgl_207.data.unityweb',
+    '/Build/webgl_207.json',
+    '/Build/webgl_207.wasm.code.unityweb',
+    '/Build/webgl_207.wasm.framework.unityweb',
+    '/Build/UnityLoader.js'
 
 ]
 self.addEventListener('install', (e) => {

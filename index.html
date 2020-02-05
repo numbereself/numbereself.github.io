@@ -1,27 +1,142 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>UniText Demo</title>
-    <link rel="manifest" id="manifest-placeholder" href="/manifest.json">
-    <script>
-      if('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-            .then((registration) => {
-              console.log("Service Worker registration successful");
-            }, (err) => {
-              console.log("Service Worker registration failed");
-            });
-          }
-    </script>
-    <script src="build/UnityLoader.js"></script>
-    <script>
-      var gameInstance = UnityLoader.instantiate("gameContainer", "build/webgl_107_final.json");
-    </script>
-  </head>
-  <body>
-    <div id="gameContainer" style="width: 960px; height: 600px; margin: auto">
-    </div>
-  </body>
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<title>UniText</title>
+	<link rel="manifest" id="manifest-placeholder" href="/manifest.json">
+	<script>
+		if('serviceWorker' in navigator) {
+			  navigator.serviceWorker.register('/sw.js')
+			  .then((registration) => {
+				console.log("Service Worker registration successful");
+			  }, (err) => {
+				console.log("Service Worker registration failed");
+			  });
+			}
+	  </script>
+	<style>
+		#MyContainer {
+			width: 100vw;
+			height: 100vh;
+			position: fixed;
+		}
+
+		body {
+			margin: 0;
+			background-color: rgb(54, 54, 54);
+		}
+
+		.progress {
+			width: 90vw;
+		}
+
+		.progress .full {
+			margin: 2px;
+			background: rgba(255, 255, 255, 0.4);
+			height: 0.5em;
+			transform-origin: top left;
+		}
+
+		#loader {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100vw;
+			height: 100vh;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+
+
+		#spinnerBox {
+			position: absolute;
+			top: 40%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+
+		.spinner {
+			font-size: 64px;
+			position: relative;
+		}
+
+		.spinner:before,
+		.spinner:after {
+			content: "";
+			position: relative;
+			display: block;
+		}
+
+		.spinner:before {
+			animation: spinner 2.5s cubic-bezier(0.75, 0, 0.5, 1) infinite normal;
+			width: 1em;
+			height: 1em;
+			background-color: #fff;
+		}
+
+		@keyframes spinner {
+			50% {
+				border-radius: 50%;
+				transform: scale(0.5) rotate(360deg);
+			}
+
+			100% {
+				transform: scale(1) rotate(720deg);
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div id="MyContainer"></div>
+
+	<div id="loader">
+		<div id="spinnerBox">
+			<span class="spinner"></span>
+		</div>
+		<div class="progress">
+			<div class="full"></div>
+		</div>
+	</div>
+</body>
+
+<script src="Build/UnityLoader.js"></script>
+<script>
+	// https://docs.unity3d.com/Manual/webgl-templates.html
+	// https://github.com/greggman/better-unity-webgl-template 
+
+	window.gameInstance = UnityLoader.instantiate("MyContainer", "Build/webgl_207.json", {
+		compatibilityCheck: function (unityInstance, onsuccess, onerror) {
+			if (!UnityLoader.SystemInfo.hasWebGL) {
+				unityInstance.popup("Your browser does not support WebGL", [{ text: "OK", callback: onerror }]);
+			} else {
+				onsuccess();
+			}
+		},
+		onProgress: MyProgressFunction
+	});
+
+	function MyProgressFunction(unityInstance, progress) {
+		if (!unityInstance.Module) { return; }
+		const loader = document.querySelector("#loader");
+		if (!unityInstance.progress) {
+			const progress = document.querySelector("#loader .progress");
+			progress.style.display = "block";
+			unityInstance.progress = progress.querySelector(".full");
+		}
+		unityInstance.progress.style.transform = `scaleX(${progress})`;
+		if (progress === 1 && !unityInstance.removeTimeout) {
+			unityInstance.removeTimeout = setTimeout(function () {
+				loader.style.display = "none";
+			}, 2000);
+		}
+	}
+
+</script>
+
 </html>
