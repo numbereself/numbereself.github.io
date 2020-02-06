@@ -48,8 +48,8 @@
 			position: absolute;
 			left: 0;
 			top: 0;
-			width: 70vw;
-			height: 70vh;
+			width: 100vw;
+			height: 100%;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
@@ -135,9 +135,10 @@
 		}
 		unityInstance.progress.style.transform = `scaleX(${progress})`;
 		if (progress === 1 && !unityInstance.removeTimeout) {
-			unityInstance.removeTimeout = setTimeout(function () {
+			unityInstance.removeTimeout = function () {
 				loader.style.display = "none";
-			}, 2000);
+				return "done";
+			}();
 		}
 	}
 
