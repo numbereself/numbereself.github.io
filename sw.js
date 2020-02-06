@@ -1,37 +1,41 @@
-let cache_name = 'unitext_v208'
+let cache_name = 'unitext_v301'
 
-let urls_to_cache = [
-    '',
-    '/',
-    '/index.html',
-    '/build/webgl_207.data.unityweb',
-    '/build/webgl_207.json',
-    '/build/webgl_207.wasm.code.unityweb',
-    '/build/webgl_207.wasm.framework.unityweb',
-    '/build/UnityLoader.js'
+let precache_urls = [
+  '',
+  '/',
+  '/index.html',
+  '/build/webgl_301.data.unityweb',
+  '/build/webgl_301.json',
+  '/build/webgl_301.wasm.code.unityweb',
+  '/build/webgl_301.wasm.framework.unityweb',
+  '/build/UnityLoader.js'
 
 ]
+
 self.addEventListener('install', (e) => {
     console.log("Service install");
-    self.skipWaiting();
-    e.waitUntil(caches.open(cache_name).then((cache) => {
-        return cache.addAll(urls_to_cache);
-    }) )
+    event.waitUntil(
+      caches.open(cache_name).then(function(cache) {
+            return cache.addAll(precache_urls);
+        }).then(function() {
+          return self.skipWaiting();
+        })
+      );
 });
 
 self.addEventListener('activate', (e) => {
     console.log("Service activate");
+    return self.clients.claim();
 });
 
 self.addEventListener('fetch', function(event) {
   event.respondWith(
-    caches.open(cache_name).then(function(cache) {
-      return cache.match(event.request).then(function (response) {
-        return response || fetch(event.request).then(function(response) {
-          cache.put(event.request, response.clone());
-          return response;
-        });
-      });
+    fetch(event.request).then(function(response) {
+      caches.open(cache_name).then(function(cache) {
+        cache.put(event.request, response.clone());});
+      return response;
+    }).catch(function() {
+      return caches.match(event.request);
     })
   );
 });

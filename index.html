@@ -16,11 +16,11 @@
 				console.log("Service Worker registration failed");
 			  });
 			}
-	  </script>
+	</script>
 	<style>
 		#MyContainer {
 			width: 100vw;
-			height: 100%; 
+			height: 100%;
 			position: fixed;
 		}
 
@@ -107,41 +107,42 @@
 			<div class="full"></div>
 		</div>
 	</div>
-</body>
 
-<script src="build/UnityLoader.js"></script>
-<script>
-	// https://docs.unity3d.com/Manual/webgl-templates.html
-	// https://github.com/greggman/better-unity-webgl-template 
-
-	window.gameInstance = UnityLoader.instantiate("MyContainer", "build/webgl_207.json", {
-		compatibilityCheck: function (unityInstance, onsuccess, onerror) {
-			if (!UnityLoader.SystemInfo.hasWebGL) {
-				unityInstance.popup("Your browser does not support WebGL", [{ text: "OK", callback: onerror }]);
-			} else {
-				onsuccess();
+	<script src="build/UnityLoader.js"></script>
+	<script>
+		// https://docs.unity3d.com/Manual/webgl-templates.html
+		// https://github.com/greggman/better-unity-webgl-template 
+	
+		window.gameInstance = UnityLoader.instantiate("MyContainer", "build/webgl_301.json", {
+			compatibilityCheck: function (unityInstance, onsuccess, onerror) {
+				if (!UnityLoader.SystemInfo.hasWebGL) {
+					unityInstance.popup("Your browser does not support WebGL", [{ text: "OK", callback: onerror }]);
+				} else {
+					onsuccess();
+				}
+			},
+			onProgress: MyProgressFunction
+		});
+	
+		function MyProgressFunction(unityInstance, progress) {
+			if (!unityInstance.Module) { return; }
+			const loader = document.querySelector("#loader");
+			if (!unityInstance.progress) {
+				const progress = document.querySelector("#loader .progress");
+				progress.style.display = "block";
+				unityInstance.progress = progress.querySelector(".full");
 			}
-		},
-		onProgress: MyProgressFunction
-	});
-
-	function MyProgressFunction(unityInstance, progress) {
-		if (!unityInstance.Module) { return; }
-		const loader = document.querySelector("#loader");
-		if (!unityInstance.progress) {
-			const progress = document.querySelector("#loader .progress");
-			progress.style.display = "block";
-			unityInstance.progress = progress.querySelector(".full");
+			unityInstance.progress.style.transform = `scaleX(${progress})`;
+			if (progress === 1 && !unityInstance.removeTimeout) {
+				unityInstance.removeTimeout = function () {
+					loader.style.display = "none";
+					return "done";
+				}();
+			}
 		}
-		unityInstance.progress.style.transform = `scaleX(${progress})`;
-		if (progress === 1 && !unityInstance.removeTimeout) {
-			unityInstance.removeTimeout = function () {
-				loader.style.display = "none";
-				return "done";
-			}();
-		}
-	}
+	
+	</script>
 
-</script>
+</body>
 
 </html>
