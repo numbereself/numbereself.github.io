@@ -1,13 +1,13 @@
-let cache_name = 'unitext_v301'
+let cache_name = 'unitext_v413'
 
 let precache_urls = [
   '',
   '/',
   '/index.html',
-  '/build/webgl_301.data.unityweb',
-  '/build/webgl_301.json',
-  '/build/webgl_301.wasm.code.unityweb',
-  '/build/webgl_301.wasm.framework.unityweb',
+  '/build/webgl_413.data.unityweb',
+  '/build/webgl_413.json',
+  '/build/webgl_413.wasm.code.unityweb',
+  '/build/webgl_413.wasm.framework.unityweb',
   '/build/UnityLoader.js'
 
 ]

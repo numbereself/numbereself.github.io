@@ -97,6 +97,24 @@
 </head>
 
 <body>
+	<script>
+		function FixInputOnSubmit() {
+			document.getElementById("fixInput").blur();
+			event.preventDefault();
+		}
+		function FoxInputUpdate() {
+			window.gameInstance.SendMessage('_WebGLKeyboard', 'ReceiveInputChange', document.getElementById("fixInput").value);
+		}
+		function FoxInputOnBlur(){
+			window.gameInstance.SendMessage('_WebGLKeyboard', 'LoseFocus');
+		}
+	</script>
+    <div>
+		<form onsubmit="FixInputOnSubmit()" autocomplete="off" style="width: 0px; height: 0px; position: absolute; top: -9999px;">
+			<input type="text" id="fixInput" oninput="FoxInputUpdate()" onblur="FoxInputOnBlur()" style="font-size: 42px;">
+		</form>
+	</div>
+
 	<div id="MyContainer"></div>
 
 	<div id="loader">
@@ -113,7 +131,7 @@
 		// https://docs.unity3d.com/Manual/webgl-templates.html
 		// https://github.com/greggman/better-unity-webgl-template 
 	
-		window.gameInstance = UnityLoader.instantiate("MyContainer", "build/webgl_301.json", {
+		window.gameInstance = UnityLoader.instantiate("MyContainer", "build/webgl_413.json", {
 			compatibilityCheck: function (unityInstance, onsuccess, onerror) {
 				if (!UnityLoader.SystemInfo.hasWebGL) {
 					unityInstance.popup("Your browser does not support WebGL", [{ text: "OK", callback: onerror }]);
